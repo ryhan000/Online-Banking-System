@@ -15,6 +15,7 @@ import com.userFront.dao.UserDao;
 import com.userFront.domain.User;
 import com.userFront.security.domain.UserRole;
 
+
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,29 +41,31 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 	}
 
-	public User createUser(User user, Set<UserRole> userRoles) {
-		User localUser = userDao.findByUsername(user.getUsername());
 
-		if (localUser != null) {
-			LOG.info("User with username {} already exist. Nothing will be done. ", user.getUsername());
-		} else {
-			String encryptedPassword = passwordEncoder.encode(user.getPassword());
-			user.setPassword(encryptedPassword);
+    public User createUser(User user, Set<UserRole> userRoles) {
+        User localUser = userDao.findByUsername(user.getUsername());
 
-			for (UserRole ur : userRoles) {
-				roleDao.save(ur.getRole());
-			}
+        if (localUser != null) {
+            LOG.info("User with username {} already exist. Nothing will be done. ", user.getUsername());
+        } else {
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
 
-			user.getUserRoles().addAll(userRoles);
+            for (UserRole ur : userRoles) {
+                roleDao.save(ur.getRole());
+                
+           }
 
-			user.setPrimaryAccount(accountService.createPrimaryAccount());
-			user.setSavingsAccount(accountService.createSavingsAccount());
+            user.getUserRoles().addAll(userRoles);
 
-			localUser = userDao.save(user);
-		}
+            user.setPrimaryAccount(accountService.createPrimaryAccount());
+            user.setSavingsAccount(accountService.createSavingsAccount());
 
-		return localUser;
-	}
+            localUser = userDao.save(user);
+        }
+
+        return localUser;
+    }
 
 	@Override
 	public User findByUsername(String username) {
