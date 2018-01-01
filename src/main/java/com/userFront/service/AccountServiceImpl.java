@@ -1,6 +1,8 @@
 package com.userFront.service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.userFront.dao.PrimaryAccountDao;
 import com.userFront.dao.SavingsAccountDao;
 import com.userFront.domain.PrimaryAccount;
+import com.userFront.domain.PrimaryTransaction;
 import com.userFront.domain.SavingsAccount;
+import com.userFront.domain.SavingsTransaction;
+import com.userFront.domain.User;
 
 
 @Service
@@ -47,8 +52,37 @@ public class AccountServiceImpl implements AccountService{
 		return savingsAccountDao.findByAccountNumber(savingsAccount.getAccountNumber());
 	}
 	
-	  private int accountGen() {
+
+	public void deposit(String accountType, double amount, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+
+        if (accountType.equalsIgnoreCase("Primary")) {
+            PrimaryAccount primaryAccount = user.getPrimaryAccount();
+            primaryAccount.setAccountBalance(primaryAccount.getAccountBalance().add(new BigDecimal(amount)));
+            System.out.println("hello2"+amount);
+            primaryAccountDao.save(primaryAccount);
+
+            Date date = new Date();
+
+            PrimaryTransaction primaryTransaction = new PrimaryTransaction(date, "Deposit to Primary Account", "Account", "Finished", amount, primaryAccount.getAccountBalance(), primaryAccount);
+         
+            
+        } else if (accountType.equalsIgnoreCase("Savings")) {
+            SavingsAccount savingsAccount = user.getSavingsAccount();
+            savingsAccount.setAccountBalance(savingsAccount.getAccountBalance().add(new BigDecimal(amount)));
+            System.out.println("hello3"+amount);
+            savingsAccountDao.save(savingsAccount);
+
+            Date date = new Date();
+            SavingsTransaction savingsTransaction = new SavingsTransaction(date, "Deposit to savings Account", "Account", "Finished", amount, savingsAccount.getAccountBalance(), savingsAccount);
+           
+        }
+    }
+	
+	
+	 private int accountGen() {
 	        return ++nextAccountNumber;
 	    }
+		
 
 }
