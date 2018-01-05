@@ -9,7 +9,7 @@
             <form th:action="@{/account/withdraw}" method="post">
                 <div class="form-group" >
                     <label for="accountType">1. Please select the account you would like to withdraw:</label>
-                    <select class="form-control" th:value="${accountType}" name="accountType" id="accountType" required="required">
+                    <select class="form-control" th:value="${accountType}" name="accountType" id="accountType" required="required" autofocus="autofocus">
                         <option disabled="disabled" selected="selected"> -- select your account -- </option>
                         <option>Primary</option>
                         <option>Savings</option>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label>2. Please specify the amount you would like to withdraw: </label>
                     <span class="input-group-addon">Amount $</span>
-                    <input th:value="${amount}" type="text" name="amount" id="amount" class="form-control" aria-label="Amount (to the nearest dollar)"/>
+                    <input th:value="${amount}" type="text" name="amount" id="amount" class="form-control" aria-label="Amount (to the nearest dollar)" autofocus="autofocus"/>
                 </div>
 
                 <input type="hidden"

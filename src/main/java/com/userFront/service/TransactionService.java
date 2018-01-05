@@ -2,7 +2,9 @@ package com.userFront.service;
 
 import java.util.List;
 
+import com.userFront.domain.PrimaryAccount;
 import com.userFront.domain.PrimaryTransaction;
+import com.userFront.domain.SavingsAccount;
 import com.userFront.domain.SavingsTransaction;
 
 public interface TransactionService {
@@ -15,5 +17,7 @@ public interface TransactionService {
     
     void savePrimaryWithdrawTransaction(PrimaryTransaction primaryTransaction);
     void saveSavingsWithdrawTransaction(SavingsTransaction savingsTransaction);
+	void betweenAccountsTransfer(String transferFrom, String transferTo, String amount, PrimaryAccount primaryAccount,
+			SavingsAccount savingsAccount);
 
 }
