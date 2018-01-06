@@ -1,18 +1,22 @@
 package com.userFront.service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.userFront.dao.PrimaryAccountDao;
 import com.userFront.dao.PrimaryTransactionDao;
+import com.userFront.dao.RecipientDao;
 import com.userFront.dao.SavingsAccountDao;
 import com.userFront.dao.SavingsTransactionDao;
 import com.userFront.domain.PrimaryAccount;
 import com.userFront.domain.PrimaryTransaction;
+import com.userFront.domain.Recipient;
 import com.userFront.domain.SavingsAccount;
 import com.userFront.domain.SavingsTransaction;
 import com.userFront.domain.User;
@@ -35,6 +39,10 @@ public class TransactionServiceImpl implements TransactionService {
 	
 	@Autowired
 	private SavingsAccountDao savingsAccountDao;
+	
+
+	@Autowired
+	private  RecipientDao  recipientDao;
 		
 
 	public List<PrimaryTransaction> findPrimaryTransactionList(String username) {
@@ -100,6 +108,35 @@ public class TransactionServiceImpl implements TransactionService {
 				}
 	        }
 		
+	}
+
+	@Override
+	public void saveRecipient(Recipient recipient) {
+		// TODO Auto-generated method stub
+		 recipientDao.save(recipient);
+		
+	}
+
+	@Override
+	public List<Recipient> findRecipientList(Principal principal) {
+		  String username = principal.getName();
+	        List<Recipient> recipientList = recipientDao.findAll().stream() 			//convert list to stream
+	                .filter(recipient -> username.equals(recipient.getUser().getUsername()))	//filters the line, equals to username
+	                .collect(Collectors.toList());
+
+	        return recipientList;
+	}
+
+	@Override
+	public Recipient findRecipientByName(String recipientName) {
+		// TODO Auto-generated method stub
+		 return recipientDao.findByName(recipientName);
+	}
+
+	@Override
+	public void deleteRecipientByName(String recipientName) {
+		// TODO Auto-generated method stub
+		recipientDao.deleteByName(recipientName);
 	}
 
 }

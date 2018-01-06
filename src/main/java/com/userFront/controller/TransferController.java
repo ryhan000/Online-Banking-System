@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.userFront.domain.PrimaryAccount;
+import com.userFront.domain.Recipient;
 import com.userFront.domain.SavingsAccount;
 import com.userFront.domain.User;
 import com.userFront.service.TransactionService;
@@ -52,6 +53,58 @@ public class TransferController {
 
         return "redirect:/userFront";
     }
+    
+    
+    @RequestMapping(value = "/recipient", method = RequestMethod.GET)
+    public String recipient(Model model, Principal principal) {
+        List<Recipient> recipientList = transactionService.findRecipientList(principal);
+
+        Recipient recipient = new Recipient();
+
+        model.addAttribute("recipientList", recipientList);
+        model.addAttribute("recipient", recipient);
+
+        return "recipient";
+    }
+
+    @RequestMapping(value = "/recipient/save", method = RequestMethod.POST)
+    public String recipientPost(@ModelAttribute("recipient") Recipient recipient, Principal principal) {
+
+        User user = userService.findByUsername(principal.getName());
+        recipient.setUser(user);
+        transactionService.saveRecipient(recipient);
+
+        return "redirect:/transfer/recipient";
+    }
+
+    @RequestMapping(value = "/recipient/edit", method = RequestMethod.GET)
+    public String recipientEdit(@RequestParam(value = "recipientName") String recipientName, Model model, Principal principal){
+
+        Recipient recipient = transactionService.findRecipientByName(recipientName);
+        List<Recipient> recipientList = transactionService.findRecipientList(principal);
+
+        model.addAttribute("recipientList", recipientList);
+        model.addAttribute("recipient", recipient);
+
+        return "recipient";
+    }
+
+    @RequestMapping(value = "/recipient/delete", method = RequestMethod.GET)
+    @Transactional
+    public String recipientDelete(@RequestParam(value = "recipientName") String recipientName, Model model, Principal principal){
+
+        transactionService.deleteRecipientByName(recipientName);
+
+        List<Recipient> recipientList = transactionService.findRecipientList(principal);
+
+        Recipient recipient = new Recipient();
+        model.addAttribute("recipient", recipient);
+        model.addAttribute("recipientList", recipientList);
+
+
+        return "recipient";
+    }
+
     
 
 }
