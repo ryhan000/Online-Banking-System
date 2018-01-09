@@ -15,7 +15,6 @@ import com.userFront.dao.UserDao;
 import com.userFront.domain.User;
 import com.userFront.security.domain.UserRole;
 
-
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,45 +26,42 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleDao roleDao;
-	
-	 
-    @Autowired
-    private AccountService accountService;
+
+	@Autowired
+	private AccountService accountService;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	public void save(User user) {
-
 		userDao.save(user);
 	}
 
+	public User createUser(User user, Set<UserRole> userRoles) {
+		User localUser = userDao.findByUsername(user.getUsername());
 
-    public User createUser(User user, Set<UserRole> userRoles) {
-        User localUser = userDao.findByUsername(user.getUsername());
+		if (localUser != null) {
+			LOG.info("User with username {} already exist. Nothing will be done. ", user.getUsername());
+		} else {
+			String encryptedPassword = passwordEncoder.encode(user.getPassword());
+			user.setPassword(encryptedPassword);
 
-        if (localUser != null) {
-            LOG.info("User with username {} already exist. Nothing will be done. ", user.getUsername());
-        } else {
-            String encryptedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encryptedPassword);
+			for (UserRole ur : userRoles) {
+				roleDao.save(ur.getRole());
 
-            for (UserRole ur : userRoles) {
-                roleDao.save(ur.getRole());
-                
-           }
+			}
 
-            user.getUserRoles().addAll(userRoles);
+			user.getUserRoles().addAll(userRoles);
 
-            user.setPrimaryAccount(accountService.createPrimaryAccount());
-            user.setSavingsAccount(accountService.createSavingsAccount());
+			user.setPrimaryAccount(accountService.createPrimaryAccount());
+			user.setSavingsAccount(accountService.createSavingsAccount());
 
-            localUser = userDao.save(user);
-        }
+			localUser = userDao.save(user);
+		}
 
-        return localUser;
-    }
+		return localUser;
+	}
 
 	@Override
 	public User findByUsername(String username) {
@@ -110,6 +106,12 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 
+	}
+
+	@Override
+	public void saveUser(User user) {
+		// TODO Auto-generated method stub
+		userDao.save(user);
 	}
 
 }

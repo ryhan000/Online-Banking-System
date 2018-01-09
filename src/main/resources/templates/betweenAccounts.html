@@ -9,7 +9,7 @@
             <form th:action="@{/transfer/betweenAccounts}" method="post">
                 <div class="form-group" >
                     <label for="transferFrom">1. Please select the account you would like to transfer From:</label>
-                    <select class="form-control" th:value="${transferFrom}" name="transferFrom" id="transferFrom" required="required" autofocus="autofocus">
+                    <select class="form-control" th:value="${transferFrom}" name="transferFrom" id="transferFrom" required="required" >
                         <option  disabled="disabled" selected="selected"> -- select your account -- </option>
                         <option value="Primary">Primary</option>
                         <option value="Savings">Savings</option>
@@ -19,7 +19,7 @@
 
                 <div class="form-group" >
                     <label for="transferTo">2. Please select the account you would like to transfer To:</label>
-                    <select class="form-control" th:value="${transferTo}" name="transferTo" id="transferTo" required="required" autofocus="autofocus">
+                    <select class="form-control" th:value="${transferTo}" name="transferTo" id="transferTo" required="required" >
                         <option  disabled="disabled" selected="selected"> -- select your account -- </option>
                         <option value="Primary">Primary</option>
                         <option value="Savings">Savings</option>
@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label>3. Please specify the amount you would like to transfer: </label>
                     <span class="input-group-addon">Amount $</span>
-                    <input th:value="${amount}" type="text" name="amount" id="amount" class="form-control" aria-label="Amount (to the nearest dollar)" required="required" autofocus="autofocus"/>
+                    <input th:value="${amount}" type="text" name="amount" id="amount" class="form-control" aria-label="Amount (to the nearest dollar)"  />
                 </div>
 
                 <input type="hidden"
