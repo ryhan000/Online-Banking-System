@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Spring Boot Online Banking System
 
 About
@@ -53,3 +54,10 @@ java -jar target/blog-demo-0.0.1-SNAPSHOT.jar
 The application should be up and running within a few seconds.
 
 Go to the web browser and visit http://localhost:8080/login
+=======
+# Online-Banking-System
+Spring Boot Online Banking System 
+mmmmmmmmmmmmmmmmm;llllll
+Spring Boot Blog Demo
+,dfklfkkffffff
+>>>>>>> 5a5fd5b617d569bfadd876a4c5b3f856fbe89b69
