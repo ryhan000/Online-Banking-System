@@ -15,6 +15,7 @@ import com.userFront.dao.RoleDao;
 import com.userFront.domain.PrimaryAccount;
 import com.userFront.domain.SavingsAccount;
 import com.userFront.domain.User;
+import com.userFront.dto.SignupForm;
 import com.userFront.security.domain.UserRole;
 import com.userFront.service.UserService;
 
@@ -40,7 +41,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(Model model) {
+	public String signup(SignupForm signupForm ,Model model) {
 		User user = new User();
 
 		model.addAttribute("user", user);
